@@ -36,6 +36,17 @@ public class PromptExamples {
         String generate(@V("text") String text);
     }
 
+    interface ReviewHelperAgent {
+        @UserMessage("Summarize the following customer review into a single sentence:\\n\\nReview: {{review}}")
+        String summarize(@V("review") String review);
+
+        @UserMessage ("Classify the sentiment of the following review summary as positive, negative, or neutral:\\n\\nSummary: {{summary}}")
+        String analyzeSentiment(@V("summary") String summary);
+
+        @UserMessage ("Suggest an appropriate action based on the sentiment:\\n\\nSentiment: {{sentiment}}")
+        String suggestAction(@V("sentiment") String sentiment);
+    }
+
     public static void init() {
         // Initialize your chat agent here
         chatModel = ModelHelper.getChatModel(ModelHelper.ModelType.GOOGLE_AI_GEMINI);
@@ -50,15 +61,28 @@ public class PromptExamples {
             "The employee was struggling initially but then picked up and was fine "
         );
         for (String text : texts) {
-            //System.out.println(chatModel.chat(chain.generate(text)));
             System.out.println("Text: " + text);
             System.out.println(chain.generate(text) );
         }
     }
 
+    public static void runReviewHelper(String review) {
+        ReviewHelperAgent agent = AiServices.create(ReviewHelperAgent.class, chatModel);
+        
+        String summary = agent.summarize(review);
+        String sentiment = agent.analyzeSentiment(summary);
+        String action = agent.suggestAction(sentiment);
+
+        System.out.println("Review: " + review);
+        System.out.println("Summary: " + summary);
+        System.out.println("Sentiment: " + sentiment);
+        System.out.println("Suggested Action: " + action);
+    }
+
     public static void main(String[] args) {
         init();
-        promptTemplateTest();
+        //promptTemplateTest();
+        runReviewHelper("The product arrived late and was damaged, but the customer service was helpful in resolving the issue.");
     }
 
 }

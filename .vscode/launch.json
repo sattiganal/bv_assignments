@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "PricingAgentAssignment",
+      "request": "launch",
+      "mainClass": "org.beyondvector.assignments.a1.PricingAgentAssignment",
+      "projectName": "app"
+    },
+    {
+      "type": "java",
       "name": "PromptExamples",
       "request": "launch",
       "mainClass": "org.beyondvector.assignments.a1.PromptExamples",
