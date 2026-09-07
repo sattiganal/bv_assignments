@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "PromptExamples",
+      "request": "launch",
+      "mainClass": "org.beyondvector.assignments.a1.PromptExamples",
+      "projectName": "app"
+    },
+    {
+      "type": "java",
+      "name": "PromptExamples",
+      "request": "launch",
+      "mainClass": "com.example.assignments.PromptExamples",
+      "projectName": "agent-chat-my_work"
+    },
+    {
+      "type": "java",
+      "request": "attach",
+      "name": "Attach to Gradle Java app",
+      "hostName": "localhost",
+      "port": 5005
+    }
+  ]
+}
