@@ -26,8 +26,13 @@ dependencies {
     implementation "dev.langchain4j:langchain4j:${langchain4jVersion}"
     implementation "dev.langchain4j:langchain4j-open-ai:${langchain4jVersion}"
     implementation "dev.langchain4j:langchain4j-google-ai-gemini:${langchain4jVersion}"
+    implementation "dev.langchain4j:langchain4j-embeddings-all-minilm-l6-v2:1.20.0-beta30"
+    implementation "dev.langchain4j:langchain4j-document-parser-apache-tika:1.20.0-beta30"  
+    implementation "dev.langchain4j:langchain4j-chroma:1.20.0-beta30"
+    implementation "org.testcontainers:chromadb:1.21.3"
     implementation "org.mapdb:mapdb:3.0.9"
-
+    implementation "ch.qos.logback:logback-classic:1.5.18"
+    implementation "org.apache.logging.log4j:log4j-core:2.25.1"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -39,7 +44,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'org.beyondvector.assignments.a2.PricingAgentWithRAG'
 }
 
 tasks.named('test') {

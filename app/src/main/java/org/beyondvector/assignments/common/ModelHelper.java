@@ -1,6 +1,8 @@
 package org.beyondvector.assignments.common;
 
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
@@ -8,9 +10,27 @@ public class ModelHelper {
 
     public enum ModelType {
         OPENAI,
-        GOOGLE_AI_GEMINI
+        GOOGLE_AI_GEMINI,
+        HUGGINGFACE_EMBEDDING,
     }
 
+    public static EmbeddingModel getEmbeddingModel(ModelType modelType) {
+        switch (modelType) {
+            case HUGGINGFACE_EMBEDDING:
+                return getHuggingFaceEmbeddingModel();
+            default:
+                throw new IllegalArgumentException("Unsupported model type: " + modelType);
+        }
+    }
+
+    public static EmbeddingModel getHuggingFaceEmbeddingModel() {
+        // return OpenAiEmbeddingModel.builder()
+        //         .apiKey(System.getenv("HF_API_KEY"))
+        //         .baseUrl("https://router.huggingface.co/v1")
+        //         .modelName("BAAI/bge-base-en-v1.5")
+        //         .build();
+        return new AllMiniLmL6V2EmbeddingModel();
+    }
 
     public static ChatModel getChatModel(ModelType modelType) {
         switch (modelType) {
