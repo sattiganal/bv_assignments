@@ -58,7 +58,7 @@ public class PricingAgentWithRAG {
             "What is the price of the Free Plan?",
             "What is included in the Analytics Pro plan?",
             "What is the cost of the Enterprise plan?",
-            "Does the Free Plan include analytics features?"
+            "affordable option for a small startup with basic needs"
         };
 
         for (String question : questions) {
@@ -78,6 +78,6 @@ public class PricingAgentWithRAG {
                 .build();
         
         System.out.println("----------------- Answers with HyDE --------------------------");
-        System.out.println(assistantWithHyDE.answer("Does the Free Plan include analytics features?"));
+        System.out.println(assistantWithHyDE.answer(questions[3]));
     }
 }
