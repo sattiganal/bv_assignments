@@ -6,3 +6,9 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Ignore class files
+*.class
+app/bin/main/org/beyondvector/assignments/common/ModelHelper.class
+app/bin/main/org/beyondvector/assignments/a2/PricingAgentWithRAG.class
+app/bin/main/org/beyondvector/assignments/common/ModelHelper.class
