@@ -1,12 +1,16 @@
 package org.beyondvector.assignments.a2;
 
 import org.beyondvector.assignments.common.DocumentHelper;
+import org.beyondvector.assignments.common.HydeQueryTransformer;
 import org.beyondvector.assignments.common.DBHelper;
 import org.beyondvector.assignments.common.ModelHelper;
 
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
@@ -33,6 +37,7 @@ public class PricingAgentWithRAG {
 
         EmbeddingModel embeddingModel = ModelHelper.getEmbeddingModel(ModelHelper.ModelType.HUGGINGFACE_EMBEDDING);
         EmbeddingStore<TextSegment> embeddingStore = DBHelper.getEmbeddingStore(DBHelper.DBType.IN_MEMORY);
+        ChatModel chatModel = ModelHelper.getChatModel(ModelHelper.ModelType.OPENAI);
 
         DocumentHelper.doSemanticChunking(pricingDocument, 1000, 50).forEach(segment -> {
             embeddingStore.add(embeddingModel.embed(segment).content(), segment);
@@ -45,7 +50,7 @@ public class PricingAgentWithRAG {
                 .build();
 
         PricingAssistant assistant = AiServices.builder(PricingAssistant.class)
-                .chatModel(ModelHelper.getChatModel(ModelHelper.ModelType.OPENAI))
+                .chatModel(chatModel)
                 .contentRetriever(retriever)
                 .build();
         
@@ -61,5 +66,18 @@ public class PricingAgentWithRAG {
             System.out.println("Answer: " + assistant.answer(question));
             System.out.println("--------------------------------------------------");
         }
+
+        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .queryTransformer(new HydeQueryTransformer(chatModel))
+                .contentRetriever(retriever) 
+                .build();
+        
+         PricingAssistant assistantWithHyDE = AiServices.builder(PricingAssistant.class)
+                .chatModel(chatModel)
+                .retrievalAugmentor(retrievalAugmentor)
+                .build();
+        
+        System.out.println("----------------- Answers with HyDE --------------------------");
+        System.out.println(assistantWithHyDE.answer("Does the Free Plan include analytics features?"));
     }
 }
